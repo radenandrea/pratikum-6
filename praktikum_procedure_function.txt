@@ -1,0 +1,31 @@
+1. Procedure (mencari akun menggunakan id)
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `AmbilSatuUser`(IN id_orang INT)
+BEGIN
+	SELECT * FROM tbl_users WHERE id_user = id_orang;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ambilUser`()
+BEGIN
+	SELECT * FROM tbl_users;
+END$$
+DELIMITER ;
+
+
+2. Function (menghitung akun yang memiliki like diatas 10000)
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` FUNCTION `JumlahLikes`() RETURNS INT(11) NOT DETERMINISTIC CONTAINS SQL SQL SECURITY DEFINER RETURN 
+(SELECT COUNT(*) AS like_count FROM tbl_scraping where like_count >10000);
+BEGIN
+	SELECT JumlahLikes() AS Jml_akun;
+END$$
+
+3. View (melihat id, username dan nama)
+CREATE VIEW datauser AS
+SELECT id_user, username, name
+FROM tbl_users
+INNER JOIN tbl_scraping
+ON id_user = id
